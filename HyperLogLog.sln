@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperLogLog", "HyperLogLog\HyperLogLog.csproj", "{201A5074-324C-41D1-8D51-8E7D8A6FA1EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperLogLogTests", "HyperLogLogTests\HyperLogLogTests.csproj", "{9C3B077E-E24F-4C59-A57A-CEDF570BB71D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{201A5074-324C-41D1-8D51-8E7D8A6FA1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{201A5074-324C-41D1-8D51-8E7D8A6FA1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{201A5074-324C-41D1-8D51-8E7D8A6FA1EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3B077E-E24F-4C59-A57A-CEDF570BB71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3B077E-E24F-4C59-A57A-CEDF570BB71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3B077E-E24F-4C59-A57A-CEDF570BB71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3B077E-E24F-4C59-A57A-CEDF570BB71D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
