@@ -26,6 +26,5 @@ namespace HyperLogLogTests
         {
             return HyperLogLogInternals.CountLeadingZeroes(hash, b);
         }
-        
     }
 }

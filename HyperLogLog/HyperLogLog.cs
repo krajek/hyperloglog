@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HyperLogLog
 {
     public class HyperLogLog
     {
-        private readonly HashAlgorithm _hashAlgorithm;
         private byte[] _registers;
 
         private byte _b;
 
+        private int _m;
+
         /// <summary>
         /// Creates HyperLogLog instance.
         /// </summary>
-        /// <param name="hashAlgorithm"></param>
         /// <param name="b">
         /// Number of bits of hash used to calculate register index. 
         /// There will be 2^b registers.
@@ -27,18 +22,30 @@ namespace HyperLogLog
         public HyperLogLog(byte b)
         {
             _b = b;
+            _m = 1 << _b;
+            _registers = new byte[_m];
         }
 
         public void AddHash(ulong hash)
         {
             uint registerIndex = HyperLogLogInternals.CalculateRegisterIndex(hash, _b);
             byte proposedRegisterValue = HyperLogLogInternals.CountLeadingZeroes(hash, _b);
-            _registers[registerIndex] = Math.Max(proposedRegisterValue, _registers[registerIndex]);
+            byte newValueOfRegister = Math.Max(proposedRegisterValue, _registers[registerIndex]);
+            _registers[registerIndex] = newValueOfRegister;
         }
 
         public int CalculateEstimatedCount()
         {
-            return 0;
+            double z = 0;
+            for (int j = 0; j < _m; j++)
+            {
+                z += 1.0 / (1 << _registers[j]);
+            }
+            z = 1 / z;
+
+            int count = (int)((double)_m * (double)_m * z);
+
+            return count;
         }
     }
 }
