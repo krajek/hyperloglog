@@ -28,8 +28,11 @@ namespace HyperLogLog
             _alpha = 0.7213 / (1 + (1.079 / _m));
         }
 
-
-
+        /// <summary>
+        /// Adds object's hash to the structure.
+        /// Hash needs to be produced by a 'good' hash function.
+        /// In practice it does not have to be cryptographycally secure.
+        /// </summary>
         public void AddHash(ulong hash)
         {
             uint registerIndex = HyperLogLogInternals.CalculateRegisterIndex(hash, _b);
@@ -43,15 +46,11 @@ namespace HyperLogLog
             double z = 0;
             for (int j = 0; j < _m; j++)
             {
-                if (_registers[j] > 63)
-                {
-                    throw new InvalidOperationException("register too big");
-                }
                 z += 1.0 / (1 << _registers[j]);
             }
             z = 1 / z;
 
-            int count = (int)(_alpha * (double)_m * (double)_m * z);
+            int count = (int)(_alpha * _m * _m * z);
 
             return count;
         }

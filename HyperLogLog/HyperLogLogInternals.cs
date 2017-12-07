@@ -2,6 +2,9 @@
 {
     public static class HyperLogLogInternals
     {
+        /// <summary>
+        /// Returns integer representation of first b bits in hash.
+        /// </summary>
         public static uint CalculateRegisterIndex(ulong hash, byte b)
         {
             ulong mask = (ulong)(1 << b) - 1;
@@ -9,6 +12,9 @@
             return (uint) registerIndex;
         }
 
+        /// <summary>
+        /// Returns 1-based position of first 1 bit in hash after discarding first b bits.
+        /// </summary>
         public static byte PositionOfLeftMostOne(ulong hash, byte b)
         {
             for (byte bitIndex = b; bitIndex <= 63; bitIndex++)
