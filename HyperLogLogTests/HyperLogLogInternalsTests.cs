@@ -19,12 +19,14 @@ namespace HyperLogLogTests
             return (int)HyperLogLogInternals.CalculateRegisterIndex(hash, b);
         }
 
-        [TestCase((uint)0, 6, ExpectedResult = 58, Description = "64 bytes discarding 6 bytes = 58 bytes of zeroes")]
-        [TestCase((uint)16, 4, ExpectedResult = 0, Description = "discarding 4 bytes and already 5th byte is 1, so there are not leading zeroes")]
-        [TestCase((uint)32, 4, ExpectedResult = 1, Description = "discarding 4 bytes and 6th byte is 1, so there is one leading 0 at 5th byte")]
-        public int CountLeadingZeroes(uint hash, byte b)
+        [TestCase((uint)0, 6, ExpectedResult = 59, Description = "64 bytes discarding 6 bytes = 58 bytes of zeroes")]
+        [TestCase((uint)16, 4, ExpectedResult = 1, Description = "discarding 4 bytes and already 5th byte is 1, so there are not leading zeroes")]
+        [TestCase((uint)32, 4, ExpectedResult = 2, Description = "discarding 4 bytes and 6th byte is 1, so there is one leading 0 at 5th byte")]
+        [TestCase((uint)64, 4, ExpectedResult = 3, Description = "discarding 4 bytes and 7th byte is 1, so there are two leading 0 at 5th and 6th byte")]
+        [TestCase((uint)65, 4, ExpectedResult = 3, Description = "same as previous, first byte should have no meaning, discarding 4 bytes and 7th byte is 1, so there are two leading 0 at 5th and 6th byte")]
+        public int PositionOfLeftMostOne(uint hash, byte b)
         {
-            return HyperLogLogInternals.CountLeadingZeroes(hash, b);
+            return HyperLogLogInternals.PositionOfLeftMostOne(hash, b);
         }
     }
 }

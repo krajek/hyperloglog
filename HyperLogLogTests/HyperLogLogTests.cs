@@ -9,12 +9,12 @@ namespace HyperLogLogTests
     public class HyperLogLogTests
     {
         [Test]
-        public void EstimatingCardinalityFor100000ElementsShouldBeWithinFewPercentError()
+        public void EstimatingCardinalityFor10000000ElementsShouldBeWithinFewPercentError()
         {
             HyperLogLog.HyperLogLog hyperLogLog=  new HyperLogLog.HyperLogLog(16);
-            HashAlgorithm hashAlgorithm = new SHA256Cng();
-            
-            for (int i = 0; i < 100000; i++)
+            HashAlgorithm hashAlgorithm = SHA1.Create();
+            ulong N = 1000000;
+            for (ulong i = 0; i < N; i++)
             {
                 byte[] hashBytes = hashAlgorithm.ComputeHash(BitConverter.GetBytes(i));
                 ulong hash = BitConverter.ToUInt64(hashBytes, 0);
@@ -23,8 +23,9 @@ namespace HyperLogLogTests
 
             int estimatedCount = hyperLogLog.CalculateEstimatedCount();
 
-            Assert.Greater(estimatedCount, 95000);
-            Assert.Less(estimatedCount, 105000);
+            double acceptableError = 0.01;
+            Assert.Greater(estimatedCount, N*(1.0-acceptableError));
+            Assert.Less(estimatedCount, N*(1.0+acceptableError));
         }
 
     }
