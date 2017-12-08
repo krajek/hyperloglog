@@ -25,7 +25,7 @@ namespace HyperLogLog
             _b = b;
             _m = 1 << _b;
             _registers = new byte[_m];
-            _alpha = 0.7213 / (1 + (1.079 / _m));
+            _alpha = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(b);
         }
 
         /// <summary>

@@ -14,6 +14,8 @@
 
         /// <summary>
         /// Returns 1-based position of first 1 bit in hash after discarding first b bits.
+        /// Described in HLL paper as:
+        /// "let ρ(s) be the position of the leftmost 1-bit of s: e.g., ρ(1 · · ·) = 1, ρ(0001 · · ·) = 4, ρ(0^K) = K + 1"
         /// </summary>
         public static byte PositionOfLeftMostOne(ulong hash, byte b)
         {
@@ -28,6 +30,21 @@
             }
 
             return (byte) (64 - b + 1);
+        }
+
+        /// <summary>
+        /// Returns alpha factor as specified in HLL paper:
+        /// "define α16 = 0.673; α32 = 0.697; α64 = 0.709; αm = 0.7213/(1+ 1.079/m) for m ≥ 128;"
+        /// </summary>
+        public static double CalculateConstantAlphaCorrectionFactor(byte b)
+        {
+            switch (b)
+            {
+                case 4: return 0.673;
+                case 5: return 0.697;
+                case 6: return 0.709;
+                default: return 0.7213 / (1.0 + (1.079 / (1 << b)));
+            }
         }
     }
 }

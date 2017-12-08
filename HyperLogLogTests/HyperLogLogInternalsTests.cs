@@ -28,5 +28,26 @@ namespace HyperLogLogTests
         {
             return HyperLogLogInternals.PositionOfLeftMostOne(hash, b);
         }
+
+        [TestCase(4, ExpectedResult = 0.673, Description = "Constant specified in HLL paper")]
+        [TestCase(5, ExpectedResult = 0.697, Description = "Constant specified in HLL paper")]
+        [TestCase(6, ExpectedResult = 0.709, Description = "Constant specified in HLL paper")]
+        public double CalculateConstantAlphaCorrectionFactor_Constants(byte b)
+        {
+            return HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(b);
+        }
+
+        [Test]
+        public void CalculateConstantAlphaCorrectionFactor_CalculatedForParamB7()
+        {
+            // b = 7 => m = 128
+            // =0,7213 / (1 + (1,079 / 128)) = 0,715270493
+
+            double result = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(7);
+
+            Assert.That(result, Is.EqualTo(0.715270493).Within(0.000000001));
+        }
+
+        
     }
 }

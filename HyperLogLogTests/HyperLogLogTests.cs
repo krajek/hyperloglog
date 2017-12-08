@@ -23,9 +23,8 @@ namespace HyperLogLogTests
 
             int estimatedCount = hyperLogLog.CalculateEstimatedCount();
 
-            double acceptableError = 0.01;
-            Assert.Greater(estimatedCount, N*(1.0-acceptableError));
-            Assert.Less(estimatedCount, N*(1.0+acceptableError));
+            double acceptableError = 0.01 * N;
+            Assert.That(estimatedCount, Is.EqualTo(N).Within(acceptableError));
         }
 
     }
