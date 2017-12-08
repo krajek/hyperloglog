@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HyperLogLogInternals.cs" />
-    <Compile Include="HyperLogLog.cs" />
+    <Compile Include="HyperLogLogCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

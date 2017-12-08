@@ -2,7 +2,7 @@
 
 namespace HyperLogLog
 {
-    public class HyperLogLog
+    public class HyperLogLogCore
     {
         private byte[] _registers;
 
@@ -12,7 +12,7 @@ namespace HyperLogLog
         private double _alpha;
 
         /// <summary>
-        /// Creates HyperLogLog instance.
+        /// Creates HyperLogLogCore instance.
         /// </summary>
         /// <param name="b">
         /// Number of bits of hash used to calculate register index. 
@@ -20,7 +20,7 @@ namespace HyperLogLog
         /// The bigger the value of b the better accuraccy of count will be achieved.
         /// On the other hand, the greater the value of b, more memory will be used for the registers.
         /// </param>
-        public HyperLogLog(byte b)
+        public HyperLogLogCore(byte b)
         {
             _b = b;
             _m = 1 << _b;

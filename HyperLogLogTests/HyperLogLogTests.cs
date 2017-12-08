@@ -11,17 +11,17 @@ namespace HyperLogLogTests
         [Test]
         public void EstimatingCardinalityFor10000000ElementsShouldBeWithinFewPercentError()
         {
-            HyperLogLog.HyperLogLog hyperLogLog=  new HyperLogLog.HyperLogLog(16);
+            HyperLogLog.HyperLogLogCore hyperLogLogCore=  new HyperLogLog.HyperLogLogCore(16);
             HashAlgorithm hashAlgorithm = SHA1.Create();
             ulong N = 1000000;
             for (ulong i = 0; i < N; i++)
             {
                 byte[] hashBytes = hashAlgorithm.ComputeHash(BitConverter.GetBytes(i));
                 ulong hash = BitConverter.ToUInt64(hashBytes, 0);
-                hyperLogLog.AddHash(hash);
+                hyperLogLogCore.AddHash(hash);
             }
 
-            int estimatedCount = hyperLogLog.CalculateEstimatedCount();
+            int estimatedCount = hyperLogLogCore.CalculateEstimatedCount();
 
             double acceptableError = 0.01 * N;
             Assert.That(estimatedCount, Is.EqualTo(N).Within(acceptableError));
