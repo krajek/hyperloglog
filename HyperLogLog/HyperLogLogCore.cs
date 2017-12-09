@@ -22,6 +22,10 @@ namespace HyperLogLog
         /// </param>
         public HyperLogLogCore(byte b)
         {
+            if (b < 4 || b > 16)
+            {
+                throw new ArgumentOutOfRangeException(nameof(b), "Parameter 'b' must have value between 4 inclusive and 16 inclusive");
+            }
             _b = b;
             _m = 1 << _b;
             _registers = new byte[_m];

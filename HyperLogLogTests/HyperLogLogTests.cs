@@ -9,9 +9,21 @@ namespace HyperLogLogTests
     public class HyperLogLogTests
     {
         [Test]
+        public void CreatingHyperLogLogCore_WithCorrectParameterB_Succeeds([Range(4,16)] byte b)
+        {
+            Assert.DoesNotThrow(() => new HyperLogLogCore(b));
+        }
+
+        [Test]
+        public void CreatingHyperLogLogCore_WithInCorrectParameterB_Succeeds([Values(3, 17)] byte b)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new HyperLogLogCore(b));
+        }
+
+        [Test]
         public void EstimatingCardinalityFor10000000ElementsShouldBeWithinFewPercentError()
         {
-            HyperLogLog.HyperLogLogCore hyperLogLogCore=  new HyperLogLog.HyperLogLogCore(16);
+            HyperLogLogCore hyperLogLogCore=  new HyperLogLogCore(16);
             HashAlgorithm hashAlgorithm = SHA1.Create();
             ulong N = 1000000;
             for (ulong i = 0; i < N; i++)
