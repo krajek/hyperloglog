@@ -1,7 +1,7 @@
-﻿using HyperLogLog;
+﻿using HLLCardinalityEstimator;
 using NUnit.Framework;
 
-namespace HyperLogLogTests
+namespace HLLCardinalityEstimatorTests
 {
     [TestFixture]
     public class HyperLogLogInternalsTests

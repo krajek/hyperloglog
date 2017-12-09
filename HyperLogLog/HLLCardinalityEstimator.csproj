@@ -7,8 +7,8 @@
     <ProjectGuid>{201A5074-324C-41D1-8D51-8E7D8A6FA1EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HyperLogLog</RootNamespace>
-    <AssemblyName>HyperLogLog</AssemblyName>
+    <RootNamespace>HLLCardinalityEstimator</RootNamespace>
+    <AssemblyName>HLLCardinalityEstimator</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
-using HyperLogLog;
+using HLLCardinalityEstimator;
 using NUnit.Framework;
 
-namespace HyperLogLogTests
+namespace HLLCardinalityEstimatorTests
 {
     [TestFixture]
     public class HyperLogLogTests

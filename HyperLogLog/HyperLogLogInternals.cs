@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HyperLogLog
+namespace HLLCardinalityEstimator
 {
     public static class HyperLogLogInternals
     {
