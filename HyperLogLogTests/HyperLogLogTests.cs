@@ -21,13 +21,16 @@ namespace HyperLogLogTests
             Assert.Throws<ArgumentOutOfRangeException>(() => new HyperLogLogCore(b));
         }
 
-        [Test]
-        public void EstimatingCardinalityFor10000000ElementsShouldBeWithinFewPercentError()
+        [TestCase(1000, 16, 1)]
+        [TestCase(10000, 16, 1)]
+        [TestCase(10000, 4, 15)]
+        [TestCase(1000000, 16, 1)]
+        [TestCase(1000000, 4, 15)]
+        public void CalculateEstimatedCount_ForGivenB_ShouldBeWithinExpectedError(int n, byte b, double acceptablePercentError)
         {
-            HyperLogLogCore hyperLogLogCore=  new HyperLogLogCore(16);
+            HyperLogLogCore hyperLogLogCore = new HyperLogLogCore(b);
             HashAlgorithm hashAlgorithm = MD5.Create();
-            ulong N = 1000000;
-            for (ulong i = 0; i < N; i++)
+            for (int i = 0; i < n; i++)
             {
                 byte[] hashBytes = hashAlgorithm.ComputeHash(BitConverter.GetBytes(i));
                 ulong hash = BitConverter.ToUInt64(hashBytes, 0);
@@ -36,7 +39,7 @@ namespace HyperLogLogTests
 
             int estimatedCount = hyperLogLogCore.CalculateEstimatedCount();
 
-            Assert.That(estimatedCount, Is.EqualTo(N).Within(1).Percent);
+            Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
         }
 
     }
