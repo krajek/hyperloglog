@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HyperLogLog.cs" />
     <Compile Include="HyperLogLogInternals.cs" />
     <Compile Include="HyperLogLogCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

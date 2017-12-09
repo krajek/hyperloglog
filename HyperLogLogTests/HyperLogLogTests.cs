@@ -72,17 +72,14 @@ namespace HLLCardinalityEstimatorTests
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
         }
 
-        private static HyperLogLogCore CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
+        private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
         {
-            HyperLogLogCore hyperLogLogCore = new HyperLogLogCore(b);
-            HashAlgorithm hashAlgorithm = MD5.Create();
+            HyperLogLog hyperLogLog = new HyperLogLog(MD5.Create(), b);
             for (int i = start; i < start + n; i++)
             {
-                byte[] hashBytes = hashAlgorithm.ComputeHash(BitConverter.GetBytes(i));
-                ulong hash = BitConverter.ToUInt64(hashBytes, 0);
-                hyperLogLogCore.AddHash(hash);
+                hyperLogLog.Add(i);
             }
-            return hyperLogLogCore;
+            return hyperLogLog;
         }
     }
 }
