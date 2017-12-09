@@ -1,4 +1,6 @@
-﻿namespace HyperLogLog
+﻿using System;
+
+namespace HyperLogLog
 {
     public static class HyperLogLogInternals
     {
@@ -46,5 +48,48 @@
                 default: return 0.7213 / (1.0 + (1.079 / (1 << b)));
             }
         }
+
+        public static int AdjustForSmallOrBigRanges(double rawEstimate, byte[] registers)
+        {
+            int m = registers.Length;
+
+            const double twoToThePowerOf32 = 4294967296.0;
+            const double bigRangeThreshold = twoToThePowerOf32 / 30.0; // around 143 000 000
+            
+            if (rawEstimate <= 2.5 * m)
+            {
+                // small range correction
+                int zeroRegisters = 0;
+                for (int i = 0; i < m; i++)
+                {
+                    if (registers[i] == 0)
+                    {
+                        zeroRegisters++;
+                    }
+                }
+
+                if (zeroRegisters == 0)
+                {
+                    return (int)rawEstimate;
+                }
+                else
+                {
+                    return (int)(m * Math.Log((double)m / (double)zeroRegisters));
+                }
+            }
+            else if (rawEstimate <= bigRangeThreshold)
+            {
+                // intermediate range: no correction
+                return (int)rawEstimate;
+            }
+            else
+            {
+                // large range correction
+                double largeRangeCorrectedResult = -twoToThePowerOf32 * Math.Log(1 - rawEstimate / twoToThePowerOf32);
+                return (int)largeRangeCorrectedResult;
+            }
+        }
+
+
     }
 }

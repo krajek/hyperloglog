@@ -26,6 +26,7 @@ namespace HyperLogLog
             {
                 throw new ArgumentOutOfRangeException(nameof(b), "Parameter 'b' must have value between 4 inclusive and 16 inclusive");
             }
+
             _b = b;
             _m = 1 << _b;
             _registers = new byte[_m];
@@ -54,9 +55,9 @@ namespace HyperLogLog
             }
             z = 1 / z;
 
-            int count = (int)(_alpha * _m * _m * z);
+            double rawEstimate = _alpha * _m * _m * z;
 
-            return count;
+            return HyperLogLogInternals.AdjustForSmallOrBigRanges(rawEstimate, _registers);
         }
     }
 }
