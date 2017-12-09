@@ -40,11 +40,10 @@ namespace HyperLogLogTests
         [Test]
         public void CalculateConstantAlphaCorrectionFactor_CalculatedForParamB7()
         {
-            // b = 7 => m = 128
-            // =0,7213 / (1 + (1,079 / 128)) = 0,715270493
-
             double result = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(7);
 
+            // b = 7 => m = 128
+            // 0,7213 / (1 + (1,079 / 128)) = 0,715270493
             Assert.That(result, Is.EqualTo(0.715270493).Within(0.000000001));
         }
 

@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using HyperLogLog;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace HyperLogLogTests
 {
@@ -24,7 +25,7 @@ namespace HyperLogLogTests
         public void EstimatingCardinalityFor10000000ElementsShouldBeWithinFewPercentError()
         {
             HyperLogLogCore hyperLogLogCore=  new HyperLogLogCore(16);
-            HashAlgorithm hashAlgorithm = SHA1.Create();
+            HashAlgorithm hashAlgorithm = MD5.Create();
             ulong N = 1000000;
             for (ulong i = 0; i < N; i++)
             {
@@ -35,8 +36,7 @@ namespace HyperLogLogTests
 
             int estimatedCount = hyperLogLogCore.CalculateEstimatedCount();
 
-            double acceptableError = 0.01 * N;
-            Assert.That(estimatedCount, Is.EqualTo(N).Within(acceptableError));
+            Assert.That(estimatedCount, Is.EqualTo(N).Within(1).Percent);
         }
 
     }
