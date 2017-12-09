@@ -59,5 +59,13 @@ namespace HyperLogLog
 
             return HyperLogLogInternals.AdjustForSmallOrBigRanges(rawEstimate, _registers);
         }
+
+        public void Merge(HyperLogLogCore other)
+        {
+            for (int i = 0; i < _m; i++)
+            {
+                _registers[i] = Math.Max(other._registers[i], _registers[i]);
+            }
+        }
     }
 }
