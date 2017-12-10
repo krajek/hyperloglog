@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Security.Cryptography;
+using System.Dynamic;
+using System.Globalization;
 using HLLCardinalityEstimator;
 using Murmur;
 using NUnit.Framework;
@@ -10,7 +11,7 @@ namespace HLLCardinalityEstimatorTests
     public class HyperLogLogTests
     {
         [Test]
-        public void CreatingHyperLogLogCore_WithCorrectParameterB_Succeeds([Range(4,16)] byte b)
+        public void CreatingHyperLogLogCore_WithCorrectParameterB_Succeeds([Range(4, 16)] byte b)
         {
             Assert.DoesNotThrow(() => new HyperLogLogCore(b));
         }
@@ -24,21 +25,45 @@ namespace HLLCardinalityEstimatorTests
         // {n, b, expectedErrorInPercent}
         static object[] EstimationTestCases =
         {
-            new object[] { 1000, (byte)16, 1.0 },
-            new object[] { 10000, (byte)16, 1.0 },
-            new object[] { 10000, (byte)10, 7.0 },
-            new object[] { 1000000, (byte)16, 1.0 },
-            new object[] { 1000000, (byte)4, 22.0 }
+            new object[] {1000, (byte) 16, 1.0},
+            new object[] {10000, (byte) 16, 1.0},
+            new object[] {10000, (byte) 10, 7.0},
+            new object[] {1000000, (byte) 16, 1.0},
+            new object[] {1000000, (byte) 4, 22.0}
         };
 
         [TestCaseSource(nameof(EstimationTestCases))]
-        public void CalculateEstimatedCount_ForGivenB_ShouldBeWithinExpectedError(int n, byte b, double acceptablePercentError)
+        public void CalculateEstimatedCount_Int32_ShouldBeWithinExpectedError(
+            int n, 
+            byte b,
+            double acceptablePercentError)
         {
-            var hyperLogLogCore = CreateHyperLogLogWithHashedIntegers(n, b);
+            Test_CalculateEstimatedCount_ShouldBeWithinAcceptableErrorRange(
+                CreateHyperLogLogWithHashedIntegers(n, b),
+                n, 
+                acceptablePercentError);
+        }
 
+        [TestCase(100000, 16, 1.0)]
+        public void CalculateEstimatedCount_String_ShouldBeWithinExpectedError(int n, byte b,double acceptablePercentError)
+        {
+            // Arrange
+            var hyperLogLogCore = CreateHyperLogLogWithHashedStrings(n, b);
+
+            // Act
             int estimatedCount = hyperLogLogCore.CalculateEstimatedCount();
 
+            // Assert
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
+        }
+
+        [TestCase(100000, 16, 1.0)]
+        public void CalculateEstimatedCount_Int64_ShouldBeWithinExpectedError(int n, byte b, double acceptablePercentError)
+        {
+            Test_CalculateEstimatedCount_ShouldBeWithinAcceptableErrorRange(
+                CreateHyperLogLogWithHashedIntegers64(n, b),
+                n,
+                acceptablePercentError);
         }
 
         [TestCaseSource(nameof(EstimationTestCases))]
@@ -53,7 +78,7 @@ namespace HLLCardinalityEstimatorTests
 
             // Assert
             int estimatedCount = first.CalculateEstimatedCount();
-            Assert.That(estimatedCount, Is.EqualTo(2*n).Within(acceptablePercentError).Percent);
+            Assert.That(estimatedCount, Is.EqualTo(2 * n).Within(acceptablePercentError).Percent);
         }
 
         [TestCaseSource(nameof(EstimationTestCases))]
@@ -72,27 +97,67 @@ namespace HLLCardinalityEstimatorTests
         }
 
         [TestCaseSource(nameof(EstimationTestCases))]
-        public void Merge_SetsWithHalfElementsTheSame_EstimateIs50PercentHigher(int n, byte b, double acceptablePercentError)
+        public void Merge_SetsWithHalfElementsTheSame_EstimateIs50PercentHigher(int n, byte b,
+            double acceptablePercentError)
         {
             // Arrange
             var first = CreateHyperLogLogWithHashedIntegers(n, b);
-            var second = CreateHyperLogLogWithHashedIntegers(n, b, n/2);
+            var second = CreateHyperLogLogWithHashedIntegers(n, b, n / 2);
 
             // Act
             first.Merge(second);
 
             // Assert
             int estimatedCount = first.CalculateEstimatedCount();
-            Assert.That(estimatedCount, Is.EqualTo(n*1.5).Within(acceptablePercentError).Percent);
+            Assert.That(estimatedCount, Is.EqualTo(n * 1.5).Within(acceptablePercentError).Percent);
         }
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
         {
-            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
-            for (int i = start; i < start + n; i++)
+            var hyperLogLog = CreateHyperLogLog(b);
+            for (Int32 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddInt32(i);
             }
+            return hyperLogLog;
+        }
+
+        private static HyperLogLog CreateHyperLogLogWithHashedIntegers64(int n, byte b, int start = 0)
+        {
+            var hyperLogLog = CreateHyperLogLog(b);
+            for (Int64 i = start; i < start + n; i++)
+            {
+                hyperLogLog.AddInt64(i);
+            }
+            return hyperLogLog;
+        }
+
+        private static HyperLogLog CreateHyperLogLogWithHashedStrings(int n, byte b)
+        {
+            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
+            for (int i = 0; i < n; i++)
+            {
+                hyperLogLog.AddUTF8String(i.ToString(CultureInfo.InvariantCulture));
+            }
+
+            return hyperLogLog;
+        }
+
+        private static void Test_CalculateEstimatedCount_ShouldBeWithinAcceptableErrorRange(
+            HyperLogLog hyperLogLog,
+            int n, 
+            double acceptablePercentError)
+        {
+            // Act
+            int estimatedCount = hyperLogLog.CalculateEstimatedCount();
+
+            // Assert
+            Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
+        }
+
+        private static HyperLogLog CreateHyperLogLog(byte b)
+        {
+            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
             return hyperLogLog;
         }
     }

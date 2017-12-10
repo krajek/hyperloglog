@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace HLLCardinalityEstimator
 {
@@ -14,9 +15,21 @@ namespace HLLCardinalityEstimator
             _hashAlgorithm = hashAlgorithm;
         }
 
-        public void AddInt32(int value)
+        public void AddInt32(Int32 value)
         {
             byte[] valueBytes = BitConverter.GetBytes(value);
+            AddBytes(valueBytes);
+        }
+
+        public void AddInt64(Int64 value)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            AddBytes(valueBytes);
+        }
+
+        public void AddUTF8String(string value)
+        {
+            byte[] valueBytes = Encoding.UTF8.GetBytes(value);
             AddBytes(valueBytes);
         }
 
