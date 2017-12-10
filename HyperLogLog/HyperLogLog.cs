@@ -17,6 +17,11 @@ namespace HLLCardinalityEstimator
         public void AddInt32(int value)
         {
             byte[] valueBytes = BitConverter.GetBytes(value);
+            AddBytes(valueBytes);
+        }
+
+        public void AddBytes(byte[] valueBytes)
+        {
             ulong hash = HashBytes(valueBytes);
             base.AddHash(hash);
         }
