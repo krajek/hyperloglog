@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using HLLCardinalityEstimator;
+using Murmur;
 using NUnit.Framework;
 
 namespace HLLCardinalityEstimatorTests
@@ -27,7 +28,7 @@ namespace HLLCardinalityEstimatorTests
             new object[] { 10000, (byte)16, 1.0 },
             new object[] { 10000, (byte)10, 7.0 },
             new object[] { 1000000, (byte)16, 1.0 },
-            new object[] { 1000000, (byte)4, 20.0 }
+            new object[] { 1000000, (byte)4, 22.0 }
         };
 
         [TestCaseSource(nameof(EstimationTestCases))]
@@ -87,7 +88,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
         {
-            HyperLogLog hyperLogLog = new HyperLogLog(MD5.Create(), b);
+            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
             for (int i = start; i < start + n; i++)
             {
                 hyperLogLog.AddInt32(i);
