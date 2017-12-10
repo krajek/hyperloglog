@@ -14,11 +14,18 @@ namespace HLLCardinalityEstimator
             _hashAlgorithm = hashAlgorithm;
         }
 
-        public void Add(int value)
+        public void AddInt32(int value)
         {
-            byte[] hashBytes = _hashAlgorithm.ComputeHash(BitConverter.GetBytes(value));
-            ulong hash = BitConverter.ToUInt64(hashBytes, 0);
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            ulong hash = HashBytes(valueBytes);
             base.AddHash(hash);
+        }
+
+        private ulong HashBytes(byte[] valueBytes)
+        {
+            byte[] hashBytes = _hashAlgorithm.ComputeHash(valueBytes);
+            ulong hash = BitConverter.ToUInt64(hashBytes, 0);
+            return hash;
         }
     }
 }
