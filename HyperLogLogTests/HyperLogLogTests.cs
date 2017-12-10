@@ -75,6 +75,15 @@ namespace HLLCardinalityEstimatorTests
                 acceptablePercentError);
         }
 
+        [TestCase(100000, 16, 1.0)]
+        public void CalculateEstimatedCount_DateTime_ShouldBeWithinExpectedError(int n, byte b, double acceptablePercentError)
+        {
+            Test_CalculateEstimatedCount_ShouldBeWithinAcceptableErrorRange(
+                CreateHyperLogLogWithHashedDateTimes(n, b),
+                n,
+                acceptablePercentError);
+        }
+
         [TestCaseSource(nameof(EstimationTestCases))]
         public void Merge_DifferentSets_ShouldDoubletheEstimate(int n, byte b, double acceptablePercentError)
         {
@@ -147,6 +156,16 @@ namespace HLLCardinalityEstimatorTests
             for (Int64 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddGuid(Guid.NewGuid());
+            }
+            return hyperLogLog;
+        }
+
+        private static HyperLogLog CreateHyperLogLogWithHashedDateTimes(int n, byte b, int start = 0)
+        {
+            var hyperLogLog = CreateHyperLogLog(b);
+            for (Int64 i = start; i < start + n; i++)
+            {
+                hyperLogLog.AddDateTime(new DateTime(2000, 1, 1).AddMinutes(i));
             }
             return hyperLogLog;
         }

@@ -39,6 +39,12 @@ namespace HLLCardinalityEstimator
             AddBytes(valueBytes);
         }
 
+        public void AddDateTime(DateTime value)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value.ToBinary());
+            AddBytes(valueBytes);
+        }
+
         public void AddBytes(byte[] valueBytes)
         {
             ulong hash = HashBytes(valueBytes);
