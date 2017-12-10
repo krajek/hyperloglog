@@ -47,12 +47,12 @@ namespace HLLCardinalityEstimatorTests
             // Arrange
             var first = CreateHyperLogLogWithHashedIntegers(n, b);
             var second = CreateHyperLogLogWithHashedIntegers(n, b, start: n);
-            first.Merge(second);
 
             // Act
-            int estimatedCount = first.CalculateEstimatedCount();
-            
+            first.Merge(second);
+
             // Assert
+            int estimatedCount = first.CalculateEstimatedCount();
             Assert.That(estimatedCount, Is.EqualTo(2*n).Within(acceptablePercentError).Percent);
         }
 
@@ -62,12 +62,12 @@ namespace HLLCardinalityEstimatorTests
             // Arrange
             var first = CreateHyperLogLogWithHashedIntegers(n, b);
             var second = CreateHyperLogLogWithHashedIntegers(n, b);
-            first.Merge(second);
 
             // Act
-            int estimatedCount = first.CalculateEstimatedCount();
+            first.Merge(second);
 
             // Assert
+            int estimatedCount = first.CalculateEstimatedCount();
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
         }
 
@@ -76,13 +76,13 @@ namespace HLLCardinalityEstimatorTests
         {
             // Arrange
             var first = CreateHyperLogLogWithHashedIntegers(n, b);
-            var second = CreateHyperLogLogWithHashedIntegers(n, b,n/2);
-            first.Merge(second);
+            var second = CreateHyperLogLogWithHashedIntegers(n, b, n/2);
 
             // Act
-            int estimatedCount = first.CalculateEstimatedCount();
+            first.Merge(second);
 
             // Assert
+            int estimatedCount = first.CalculateEstimatedCount();
             Assert.That(estimatedCount, Is.EqualTo(n*1.5).Within(acceptablePercentError).Percent);
         }
 
