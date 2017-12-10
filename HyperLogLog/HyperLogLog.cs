@@ -33,6 +33,12 @@ namespace HLLCardinalityEstimator
             AddBytes(valueBytes);
         }
 
+        public void AddGuid(Guid value)
+        {
+            byte[] valueBytes = value.ToByteArray();
+            AddBytes(valueBytes);
+        }
+
         public void AddBytes(byte[] valueBytes)
         {
             ulong hash = HashBytes(valueBytes);
