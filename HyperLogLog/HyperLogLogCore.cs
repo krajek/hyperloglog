@@ -46,6 +46,11 @@ namespace HLLCardinalityEstimator
             _registers[registerIndex] = newValueOfRegister;
         }
 
+
+        /// <summary>
+        /// Returns estimated count of distict hashes added to HyperLogLogCore.
+        /// There is not caching, estimated count is calculated on every call of this method.
+        /// </summary>
         public int CalculateEstimatedCount()
         {
             double z = 0;
@@ -60,6 +65,10 @@ namespace HLLCardinalityEstimator
             return HyperLogLogInternals.AdjustForSmallOrBigRanges(rawEstimate, _registers);
         }
 
+        /// <summary>
+        /// Merges other HyperLogLogCore instance into the current one.
+        /// This method does change the current instance, but it does not change the other one.
+        /// </summary>
         public void Merge(HyperLogLogCore other)
         {
             for (int i = 0; i < _m; i++)

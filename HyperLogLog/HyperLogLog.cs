@@ -15,6 +15,18 @@ namespace HLLCardinalityEstimator
             _hashAlgorithm = hashAlgorithm;
         }
 
+        public void AddByte(byte value)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            AddBytes(valueBytes);
+        }
+
+        public void AddInt16(Int16 value)
+        {
+            byte[] valueBytes = BitConverter.GetBytes(value);
+            AddBytes(valueBytes);
+        }
+
         public void AddInt32(Int32 value)
         {
             byte[] valueBytes = BitConverter.GetBytes(value);

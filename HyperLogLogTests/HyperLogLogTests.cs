@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using System.Globalization;
 using HLLCardinalityEstimator;
 using Murmur;
@@ -55,6 +54,15 @@ namespace HLLCardinalityEstimatorTests
 
             // Assert
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
+        }
+
+        [TestCase(10000, 16, 1.0)]
+        public void CalculateEstimatedCount_Int16_ShouldBeWithinExpectedError(short n, byte b, double acceptablePercentError)
+        {
+            Test_CalculateEstimatedCount_ShouldBeWithinAcceptableErrorRange(
+                CreateHyperLogLogWithHashedIntegers16(n, b),
+                n,
+                acceptablePercentError);
         }
 
         [TestCase(100000, 16, 1.0)]
@@ -136,6 +144,16 @@ namespace HLLCardinalityEstimatorTests
             for (Int32 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddInt32(i);
+            }
+            return hyperLogLog;
+        }
+
+        private static HyperLogLog CreateHyperLogLogWithHashedIntegers16(short n, byte b)
+        {
+            var hyperLogLog = CreateHyperLogLog(b);
+            for (Int16 i = 0; i < n; i++)
+            {
+                hyperLogLog.AddInt64(i);
             }
             return hyperLogLog;
         }
