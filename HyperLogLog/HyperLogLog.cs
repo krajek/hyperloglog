@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Murmur;
 
 namespace HLLCardinalityEstimator
 {
@@ -13,6 +14,11 @@ namespace HLLCardinalityEstimator
             byte b) : base(b)
         {
             _hashAlgorithm = hashAlgorithm;
+        }
+
+        public HyperLogLog(byte b) : base(b)
+        {
+            _hashAlgorithm = MurmurHash.Create128();
         }
 
         public void AddByte(byte value)

@@ -49,6 +49,11 @@ namespace HLLCardinalityEstimator
             }
         }
 
+        /// <summary>
+        /// For both very small and very large (less than 2.5m or greater than 143000)
+        /// estimates are outside of assumed standard error. As a last step of HLL
+        /// algorithm heuristic corrections are applied.
+        /// </summary>
         public static int AdjustForSmallOrBigRanges(double rawEstimate, byte[] registers)
         {
             int m = registers.Length;

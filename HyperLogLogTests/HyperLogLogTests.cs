@@ -140,7 +140,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
         {
-            var hyperLogLog = CreateHyperLogLog(b);
+            var hyperLogLog = new HyperLogLog(b);
             for (Int32 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddInt32(i);
@@ -150,7 +150,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers16(short n, byte b)
         {
-            var hyperLogLog = CreateHyperLogLog(b);
+            var hyperLogLog = new HyperLogLog(b);
             for (Int16 i = 0; i < n; i++)
             {
                 hyperLogLog.AddInt64(i);
@@ -160,7 +160,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers64(int n, byte b, int start = 0)
         {
-            var hyperLogLog = CreateHyperLogLog(b);
+            var hyperLogLog = new HyperLogLog(b);
             for (Int64 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddInt64(i);
@@ -170,7 +170,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedGuids(int n, byte b, int start = 0)
         {
-            var hyperLogLog = CreateHyperLogLog(b);
+            var hyperLogLog = new HyperLogLog(b);
             for (Int64 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddGuid(Guid.NewGuid());
@@ -180,7 +180,8 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedDateTimes(int n, byte b, int start = 0)
         {
-            var hyperLogLog = CreateHyperLogLog(b);
+            var hyperLogLog = new HyperLogLog(b);
+
             for (Int64 i = start; i < start + n; i++)
             {
                 hyperLogLog.AddDateTime(new DateTime(2000, 1, 1).AddMinutes(i));
@@ -190,7 +191,7 @@ namespace HLLCardinalityEstimatorTests
 
         private static HyperLogLog CreateHyperLogLogWithHashedStrings(int n, byte b)
         {
-            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
+            HyperLogLog hyperLogLog = new HyperLogLog(b);
             for (int i = 0; i < n; i++)
             {
                 hyperLogLog.AddUTF8String(i.ToString(CultureInfo.InvariantCulture));
@@ -209,12 +210,6 @@ namespace HLLCardinalityEstimatorTests
 
             // Assert
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
-        }
-
-        private static HyperLogLog CreateHyperLogLog(byte b)
-        {
-            HyperLogLog hyperLogLog = new HyperLogLog(MurmurHash.Create128(), b);
-            return hyperLogLog;
         }
     }
 }
