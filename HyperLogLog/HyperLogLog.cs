@@ -5,7 +5,7 @@ using Murmur;
 
 namespace HLLCardinalityEstimator
 {
-    public class HyperLogLog : HyperLogLogCore
+    public class HyperLogLog : HyperLogLogCore, IHyperLogLog
     {
         private readonly HashAlgorithm _hashAlgorithm;
 
