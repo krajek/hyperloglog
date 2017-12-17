@@ -138,6 +138,51 @@ namespace HLLCardinalityEstimatorTests
             Assert.That(estimatedCount, Is.EqualTo(n * 1.5).Within(acceptablePercentError).Percent);
         }
 
+        [Test]
+        public void Merge_NullSet_ThrowsExeption()
+        {
+            // Arrange
+            var hyperLogLog = new HyperLogLog(4);
+
+            // Act
+            TestDelegate action = () => hyperLogLog.Merge(null);
+
+            // Assert
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(action);
+            Assert.AreEqual("other", exception.ParamName);
+        }
+
+        [Test]
+        public void Merge_SameSet_ThrowsExeption()
+        {
+            // Arrange
+            var hyperLogLog = new HyperLogLog(4);
+
+            // Act
+            TestDelegate action = () => hyperLogLog.Merge(hyperLogLog);
+
+            // Assert
+            ArgumentException exception = Assert.Throws<ArgumentException>(action);
+            Assert.AreEqual("other", exception.ParamName);
+            StringAssert.StartsWith("Cannot merge instance of HyperLogLog to itself", exception.Message);
+        }
+
+        [Test]
+        public void Merge_DifferentB_ThrowsExeption()
+        {
+            // Arrange
+            var hyperLogLog = new HyperLogLog(4);
+            var other = new HyperLogLog(5);
+
+            // Act
+            TestDelegate action = () => hyperLogLog.Merge(other);
+
+            // Assert
+            ArgumentException exception = Assert.Throws<ArgumentException>(action);
+            Assert.AreEqual("other", exception.ParamName);
+            StringAssert.StartsWith("Cannot merge instance of HyperLogLog with b = 5 to instance with b = 4", exception.Message);
+        }
+
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)
         {
             var hyperLogLog = new HyperLogLog(b);

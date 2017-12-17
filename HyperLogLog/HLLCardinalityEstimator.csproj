@@ -49,6 +49,7 @@
     <Compile Include="HyperLogLog.cs" />
     <Compile Include="HyperLogLogInternals.cs" />
     <Compile Include="HyperLogLogCore.cs" />
+    <Compile Include="IHyperLogLogCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace HLLCardinalityEstimator
 {
-    public class HyperLogLogCore
+    public class HyperLogLogCore : IHyperLogLogCore
     {
         private byte[] _registers;
 
@@ -71,6 +71,23 @@ namespace HLLCardinalityEstimator
         /// </summary>
         public void Merge(HyperLogLogCore other)
         {
+            if (other == null)
+            {
+                throw new ArgumentNullException(nameof(other));
+            }
+
+            if (other == this)
+            {
+                throw new ArgumentException("Cannot merge instance of HyperLogLog to itself", nameof(other));
+            }
+
+            if (other._b != this._b)
+            {
+                throw new ArgumentException(
+                    $"Cannot merge instance of HyperLogLog with b = {other._b} to instance with b = {this._b}",
+                    nameof(other));
+            }
+
             for (int i = 0; i < _m; i++)
             {
                 _registers[i] = Math.Max(other._registers[i], _registers[i]);
