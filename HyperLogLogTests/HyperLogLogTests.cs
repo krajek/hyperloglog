@@ -49,10 +49,10 @@ namespace HLLCardinalityEstimatorTests
         public void CalculateEstimatedCount_String_ShouldBeWithinExpectedError(int n, byte b,double acceptablePercentError)
         {
             // Arrange
-            var hyperLogLogCore = CreateHyperLogLogWithHashedStrings(n, b);
+            var hyperLogLog = CreateHyperLogLogWithHashedStrings(n, b);
 
             // Act
-            int estimatedCount = hyperLogLogCore.CalculateEstimatedCount();
+            int estimatedCount = hyperLogLog.CalculateEstimatedCount();
 
             // Assert
             Assert.That(estimatedCount, Is.EqualTo(n).Within(acceptablePercentError).Percent);
@@ -189,17 +189,17 @@ namespace HLLCardinalityEstimatorTests
         public void SerializeDeserialize_SameEstimate(int n, byte b)
         {
             // Arrange
-            HyperLogLog hyperLogLogCore = CreateHyperLogLogWithHashedStrings(n, b);
+            HyperLogLog hyperLogLog = CreateHyperLogLogWithHashedStrings(n, b);
             BinaryFormatter formatter = new BinaryFormatter();
             MemoryStream stream = new MemoryStream();
 
             // Act
-            formatter.Serialize(stream, hyperLogLogCore);
+            formatter.Serialize(stream, hyperLogLog);
             stream.Position = 0;
             HyperLogLog deserialized = (HyperLogLog)formatter.Deserialize(stream);
 
             // Assert
-            int originalEstimate = hyperLogLogCore.CalculateEstimatedCount();
+            int originalEstimate = hyperLogLog.CalculateEstimatedCount();
             Assert.That(originalEstimate, Is.GreaterThan(0.9*n));
             Assert.That(originalEstimate, Is.EqualTo(deserialized.CalculateEstimatedCount()));
         }
