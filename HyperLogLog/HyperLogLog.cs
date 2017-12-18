@@ -1,22 +1,22 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using Murmur;
 
 namespace HLLCardinalityEstimator
 {
+    [Serializable]
     public class HyperLogLog : HyperLogLogCore, IHyperLogLog
     {
         private readonly HashAlgorithm _hashAlgorithm;
 
-        public HyperLogLog(
-            HashAlgorithm hashAlgorithm,
-            byte b) : base(b)
+        public HyperLogLog(byte b) : base(b)
         {
-            _hashAlgorithm = hashAlgorithm;
+            _hashAlgorithm = MurmurHash.Create128();
         }
 
-        public HyperLogLog(byte b) : base(b)
+        public HyperLogLog(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             _hashAlgorithm = MurmurHash.Create128();
         }

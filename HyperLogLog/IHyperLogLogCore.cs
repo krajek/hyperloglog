@@ -20,5 +20,7 @@
         /// This method does change the current instance, but it does not change the other one.
         /// </summary>
         void Merge(HyperLogLogCore other);
+
+
     }
 }

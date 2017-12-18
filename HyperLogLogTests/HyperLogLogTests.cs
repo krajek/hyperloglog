@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using HLLCardinalityEstimator;
 using Murmur;
 using NUnit.Framework;
@@ -181,6 +183,25 @@ namespace HLLCardinalityEstimatorTests
             ArgumentException exception = Assert.Throws<ArgumentException>(action);
             Assert.AreEqual("other", exception.ParamName);
             StringAssert.StartsWith("Cannot merge instance of HyperLogLog with b = 5 to instance with b = 4", exception.Message);
+        }
+
+        [TestCase(100000, 16)]
+        public void SerializeDeserialize_SameEstimate(int n, byte b)
+        {
+            // Arrange
+            HyperLogLog hyperLogLogCore = CreateHyperLogLogWithHashedStrings(n, b);
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();
+
+            // Act
+            formatter.Serialize(stream, hyperLogLogCore);
+            stream.Position = 0;
+            HyperLogLog deserialized = (HyperLogLog)formatter.Deserialize(stream);
+
+            // Assert
+            int originalEstimate = hyperLogLogCore.CalculateEstimatedCount();
+            Assert.That(originalEstimate, Is.GreaterThan(0.9*n));
+            Assert.That(originalEstimate, Is.EqualTo(deserialized.CalculateEstimatedCount()));
         }
 
         private static HyperLogLog CreateHyperLogLogWithHashedIntegers(int n, byte b, int start = 0)

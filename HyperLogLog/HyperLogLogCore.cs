@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace HLLCardinalityEstimator
 {
-    public class HyperLogLogCore : IHyperLogLogCore
+    [Serializable]
+    public class HyperLogLogCore : IHyperLogLogCore, ISerializable
     {
         private byte[] _registers;
 
@@ -30,7 +32,18 @@ namespace HLLCardinalityEstimator
             _b = b;
             _m = 1 << _b;
             _registers = new byte[_m];
-            _alpha = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(b);
+            _alpha = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(_b);
+        }
+
+        /// <summary>
+        /// The constructor for deserialization.
+        /// </summary>
+        public HyperLogLogCore(SerializationInfo info, StreamingContext context)
+        {
+            _b = info.GetByte("b");
+            _m = 1 << _b;
+            _alpha = HyperLogLogInternals.CalculateConstantAlphaCorrectionFactor(_b);
+            _registers = (byte[])info.GetValue("registers", typeof(byte[]));
         }
 
         /// <summary>
@@ -92,6 +105,12 @@ namespace HLLCardinalityEstimator
             {
                 _registers[i] = Math.Max(other._registers[i], _registers[i]);
             }
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("b", _b);
+            info.AddValue("registers", _registers, typeof(byte[]));
         }
     }
 }
