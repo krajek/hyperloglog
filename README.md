@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/n007fpp6670n25q1?svg=true)](https://ci.appveyor.com/project/krajek/hyperloglog)
+
 # Introduction
 
 This is an educational implementation of HyperLogLog algorithm based directly on:
