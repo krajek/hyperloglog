@@ -26,6 +26,19 @@ hyperLogLog.AddUTF8String("C");
 var estimatedCount = hyperLogLog.CalculateEstimatedCount();
 ```
 
+Following code creates `HyperLogLog` object, the serializes it to `byte[]`, finally deserializes back to the `HyperLogLog`.
+
+```C#
+var hyperLogLog = new HyperLogLog(b);
+
+BinaryFormatter formatter = new BinaryFormatter();
+MemoryStream stream = new MemoryStream();
+
+formatter.Serialize(stream, hyperLogLog);
+stream.Position = 0;
+HyperLogLog deserialized = (HyperLogLog)formatter.Deserialize(stream);
+```
+
 # Production use
 
 For production use it may be wiser to use https://github.com/Microsoft/CardinalityEstimation
