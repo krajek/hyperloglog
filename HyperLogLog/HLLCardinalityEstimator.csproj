@@ -1,9 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-  <!-- v4.5.2 => net452. v4.6 => net46, etc.-->
-  <TargetFramework>net452</TargetFramework>
-</PropertyGroup>
-  
+    <!-- v4.5.2 => net452. v4.6 => net46, etc.-->
+    <TargetFramework>net452</TargetFramework>
+    <PackageId>HLLCardinalityEstimator.krajek</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Artur Krajewski</Authors>
+    <Description>Straithforward implementation of HyperLogLog estimator</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First release</PackageReleaseNotes>
+    <Copyright>Copyright (c) Artur Krajewski. All rights reserved.</Copyright>
+    <PackageTags>hyperloglog cardinality estimation</PackageTags>
+    <RepositoryUrl>https://github.com/krajek/hyperloglog.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/krajek/hyperloglog/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/krajek/hyperloglog.git</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
