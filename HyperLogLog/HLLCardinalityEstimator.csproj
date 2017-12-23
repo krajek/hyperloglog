@@ -16,6 +16,6 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MurmurHash" Version="1.0.0" />
+    <PackageReference Include="MurmurHash" Version="1.0.2" />
   </ItemGroup>
 </Project>
